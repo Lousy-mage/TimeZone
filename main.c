@@ -82,9 +82,11 @@ int main(){
         printf("---------------------------\n");
         printf("Enter country 1\n");
         fgets(country1,30,stdin);
+        country1[strcspn(country1, "\n")] = '\0';
         Offset[0]=cSearch(country1);
         printf("Enter Country2\n");
         fgets(country2,30,stdin);
+        country2[strcspn(country2, "\n")] = '\0';
         Offset[1]=cSearch(country2);
         i1=tSearch(Offset[0]);
         i2=tSearch(Offset[1]);
