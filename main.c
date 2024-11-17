@@ -29,10 +29,6 @@ Implementation:
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-// struct Time{
-// int Hour 5;
-// int Minute;
-// };
 
 int cSearch(char country[]){
     char line[1024];
@@ -52,6 +48,7 @@ int cSearch(char country[]){
           //  word = strtok(NULL,",");
             i++;
         }
+        
     fclose(filePtr);
     return -1;
     }
@@ -67,10 +64,10 @@ int main(){
         printf("Welcome to World clock\n");
         printf("---------------------------\n");
         printf("Enter country 1\n");
-        scanf("%s",&country1);
+        scanf("%s",country1);
         Offset[0]=cSearch(country1);
         printf("Enter Country2\n");
-        scanf("%s",&country2);
+        scanf("%s",country2);
         Offset[1]=cSearch(country2);
 
         printf("offset0= ",Offset[0]);
