@@ -27,14 +27,60 @@ Implementation:
 
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 // struct Time{
 // int Hour 5;
 // int Minute;
 // };
+
+int cSearch(char country[]){
+    char line[1024];
+    char *word;
+    int i=0;
+    FILE *filePtr=fopen("/home/mage/TimeZone/countries.txt","r");
+    if(filePtr!=NULL){
+        while(fgets(line,sizeof(line),filePtr)){
+         //   word = strtok(line, ",");
+        if (strcmp(line, country) == 0) {
+            fclose(filePtr);
+            return i; // Found the country
+        }
+//            word = strtok(line,",");
+ //           if(strcmp(word,country)==0)
+   //             return i;
+          //  word = strtok(NULL,",");
+            i++;
+        }
+    fclose(filePtr);
+    return -1;
+    }
+
+}
 int main(){
+    char country1[30],country2[30];
+    int option;
     int Hour,Minute;
     int Offset[2];
     int off;
+ //   do{
+        printf("Welcome to World clock\n");
+        printf("---------------------------\n");
+        printf("Enter country 1\n");
+        scanf("%s",&country1);
+        Offset[0]=cSearch(country1);
+        printf("Enter Country2\n");
+        scanf("%s",&country2);
+        Offset[1]=cSearch(country2);
+
+        printf("offset0= ",Offset[0]);
+        printf("offset1= ",Offset[1]);
+
+
+ //   }while(option!=0);
+    
+
+    
 
     printf("Enter The time of first country\n");
     scanf("%d:%d",&Hour,&Minute);
