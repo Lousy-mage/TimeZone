@@ -9,7 +9,7 @@ Features:
 
 
 Implementation:
-- A zones.txt file will be created which stores the time std time zone of all countries with an 
+- A zones.txt file will be created which stores the time std time zone of all countries with an
     index number
 - A countries.txt will be created containing the country names in alphabetic order
 
@@ -29,68 +29,88 @@ Implementation:
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+// #include "ZaWarudo"
 
-int cSearch(char country[]){
+
+int cSearch(char*country){
     char line[1024];
-    char *word;
     int i=0;
     FILE *filePtr=fopen("/home/mage/TimeZone/countries.txt","r");
     if(filePtr!=NULL){
         while(fgets(line,sizeof(line),filePtr)){
-         //   word = strtok(line, ",");
+        line[strcspn(line, "\n")] = '\0';
         if (strcmp(line, country) == 0) {
             fclose(filePtr);
             return i; // Found the country
         }
-//            word = strtok(line,",");
- //           if(strcmp(word,country)==0)
-   //             return i;
-          //  word = strtok(NULL,",");
             i++;
         }
-        
+    fclose(filePtr);
+    return -1;
+    }
+
+}
+int tSearch(int index){
+    char line[1024];
+    int t,i=0;
+    FILE *filePtr=fopen("/home/mage/TimeZone/timeoffset.txt","r");
+    if(filePtr!=NULL){
+        while(fgets(line,sizeof(line),filePtr)){
+        if (i==index) {
+            fscanf(filePtr,"%d",&t);
+            //fseek(filePtr,t,index);
+            fclose(filePtr);
+            return t; // Found the country
+        }
+            i++;
+        }
     fclose(filePtr);
     return -1;
     }
 
 }
 int main(){
+    // world();
     char country1[30],country2[30];
     int option;
     int Hour,Minute;
     int Offset[2];
     int off;
+    int i1,i2;
  //   do{
         printf("Welcome to World clock\n");
         printf("---------------------------\n");
         printf("Enter country 1\n");
-        scanf("%s",country1);
+        fgets(country1,30,stdin);
         Offset[0]=cSearch(country1);
         printf("Enter Country2\n");
-        scanf("%s",country2);
+        fgets(country2,30,stdin);
         Offset[1]=cSearch(country2);
+        i1=tSearch(Offset[0]);
+        i2=tSearch(Offset[1]);
 
-        printf("offset0= ",Offset[0]);
-        printf("offset1= ",Offset[1]);
+
+        printf("offset0= %d\n",i1);
+        printf("offset1= %d\n",i2);
 
 
  //   }while(option!=0);
-    
 
-    
+
+
 
     printf("Enter The time of first country\n");
     scanf("%d:%d",&Hour,&Minute);
     off=Hour*60+Minute;
-    if(Offset[0]>0)
-        off-=Offset[0];
+    if(i1>0)
+        off-=i1;
     else
-        off+=Offset[0];
+        off+=i1;
 
-    if(Offset[1]>0)
-        off+=Offset[1];
+    if(i2>0)
+        off+=i2;
     else
-        off-=Offset[1];
+        off-=i2;
 
     Hour=off/60;
     Minute=off%60;
