@@ -1,55 +1,34 @@
-/*
-
-Features:
-- Select Country for time conversion
-- Select Country to convert into
-- All Officially recogonized country's standard time zone will be taken as the measure
-
-- Scope for Live Time???
-
-
-Implementation:
-- A zones.txt file will be created which stores the time std time zone of all countries with an
-    index number
-- A countries.txt will be created containing the country names in alphabetic order
-
-###begin:
-- Display prompt to enter country names and time.
-- When a country name is entered, search in country.txt using binary search
-- if found, return index
-- use index to find the time zone.
-- convert the time input in the form HH:mm to minutes or seconds since midnight.
-- the add or subtract the time-offset in the same format(i.e., seconds or minutes since midnight)
-- convert to HH:mm format.
-- Wait for keyboard input then repeat from begin.
-
-*/
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-// #include "ZaWarudo"
-
+#include "ZaWarudo.h"
 
 int cSearch(char*country){
     char line[1024];
     int i=0;
     FILE *filePtr=fopen("/home/mage/TimeZone/countries.txt","r");
     if(filePtr!=NULL){
+
+        unsigned char bom[3];
+        if (fread(bom, 1, 3, filePtr) != 3 ||
+            bom[0] != 0xEF || bom[1] != 0xBB || bom[2] != 0xBF) {
+            
+            rewind(filePtr);
+        }
         while(fgets(line,sizeof(line),filePtr)){
-        line[strcspn(line, "\n")] = '\0';
+        line[strcspn(line, "\r")] = '\0';
         if (strcmp(line, country) == 0) {
             fclose(filePtr);
-            return i; // Found the country
+            return i-1; // Found the country
         }
             i++;
         }
-    fclose(filePtr);
-    return -1;
+        fclose(filePtr);
+        return -1;
     }
 
 }
+
 int tSearch(int index){
     char line[1024];
     int t,i=0;
@@ -67,10 +46,11 @@ int tSearch(int index){
     fclose(filePtr);
     return -1;
     }
-
 }
+
 int main(){
-    // world();
+    world();
+    printf("\n");
     char country1[30],country2[30];
     int option;
     int Hour,Minute;
@@ -82,11 +62,11 @@ int main(){
         printf("---------------------------\n");
         printf("Enter country 1\n");
         fgets(country1,30,stdin);
-        country1[strcspn(country1, "\n")] = '\0';
+        country1[strcspn(country1,"\n")]='\0';
         Offset[0]=cSearch(country1);
         printf("Enter Country2\n");
         fgets(country2,30,stdin);
-        country2[strcspn(country2, "\n")] = '\0';
+        country2[strcspn(country2,"\n")]='\0';
         Offset[1]=cSearch(country2);
         i1=tSearch(Offset[0]);
         i2=tSearch(Offset[1]);
@@ -96,13 +76,9 @@ int main(){
         printf("offset1= %d\n",i2);
 
 
- //   }while(option!=0);
-
-
-
-
     printf("Enter The time of first country\n");
     scanf("%d:%d",&Hour,&Minute);
+    
     off=Hour*60+Minute;
     if(i1>0)
         off-=i1;
@@ -124,5 +100,6 @@ int main(){
         Hour+=24;
     }
     printf("%02d:%02d \n",Hour,Minute);
+
     return 0;
 }
