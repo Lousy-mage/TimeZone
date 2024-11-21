@@ -24,5 +24,5 @@ void world() {
         "             `\"Y8baa,      ,d888P,ad8P\"'\n"
         "                  ``\"\"YYba8888P\"\"''\n";
     
-    printf("%s", dragon);
+    printf("\033[32m%s\033[0m", dragon);
 }
